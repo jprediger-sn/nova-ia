@@ -10,10 +10,6 @@ export default $config({
     };
   },
   async run() {
-    new sst.aws.React("nova-ia-web", {
-      path: "./frontend",
-    });
-
     // Criar o Cognito User Pool
     const userPool = new sst.aws.CognitoUserPool("nova-ia-auth", {
       usernames: ["email"],
@@ -21,6 +17,16 @@ export default $config({
 
     // Criar o Cognito User Pool Client
     const userPoolClient = userPool.addClient("nova-ia-auth-client");
+
+    // Criar o React app e expor recursos do Cognito
+    const web = new sst.aws.React("nova-ia-web", {
+      path: "./frontend",
+      environment: {
+        VITE_COGNITO_USER_POOL_ID: userPool.id,
+        VITE_COGNITO_CLIENT_ID: userPoolClient.id,
+        VITE_COGNITO_REGION: aws.getArnOutput(userPool).region,
+      },
+    });
 
     // Criar o API Gateway com defaults para todas as rotas
     const api = new sst.aws.ApiGatewayV2("nova-ia-api-gateway", {
@@ -45,26 +51,10 @@ export default $config({
       },
     });
 
-    // Rota pública (sem autenticação)
-    api.route("GET /", "./backend");
-
-    // Rotas protegidas (com autenticação JWT)
-    api.route("POST /", "./backend", {
-      auth: {
-        jwt: {
-          authorizer: jwtAuthorizer.id,
-        },
-      },
-    });
-
-    // Exemplo de rota protegida adicional
-    api.route("GET /protected", "./backend", {
-      auth: {
-        jwt: {
-          authorizer: jwtAuthorizer.id,
-        },
-      },
-    });
+    // Rota catch-all: captura todas as rotas e métodos HTTP
+    // O chi router interno fará o roteamento específico
+    api.route("ANY /{proxy+}", "./backend");
+    api.route("ANY /", "./backend");
     
   },
 });

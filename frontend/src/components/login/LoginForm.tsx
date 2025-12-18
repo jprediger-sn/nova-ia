@@ -1,0 +1,175 @@
+// src/pages/LoginPage/LoginPage.tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/contexts/AuthContext"; // Ajuste o caminho
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  loginFormSchema,
+  type LoginFormValues,
+} from "@/components/login/LoginFormSchema"; // Assumindo que este arquivo existe
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useState } from "react";
+
+import { toast } from "sonner";
+
+const LoginForm = () => {
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "", // Ou 'username' dependendo da sua configuração do Cognito
+      password: "",
+    },
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      if (auth.isAuthenticating) return;
+      await auth.login({
+        username: data.email,
+        password: data.password,
+      });
+      // se sucesso, redireciona para a página inicial ou outra página
+      navigate({
+        to: "/",
+        replace: true,
+      });
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      toast.warning(
+        "Erro ao fazer login. Verifique suas credenciais e tente novamente.",
+        {
+          position: "top-center",
+        }
+      );
+    }
+  };
+
+  // Se estiver carregando o estado inicial do usuário (ex: refresh da página)
+  if (auth.isLoading) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+      <div className="flex items-center gap-2 mb-4">
+        <img src="/go-rag-logo.svg" alt="Logo Supernova" className="h-12" />
+      </div>
+      <Card className="w-full max-w-sm">
+        <CardHeader className="space-y-1 text-center">
+          <CardTitle className="text-2xl">Acesse sua conta</CardTitle>
+          <CardDescription>
+            Digite seu email e senha para continuar.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="email" // Mantenha 'email' se for o nome do seu campo no formulário
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>{" "}
+                    {/* Ajuste o label se necessário */}
+                    <FormControl>
+                      <Input
+                        placeholder="seu@email.com"
+                        {...field}
+                        type="text"
+                        autoComplete="email"
+                        disabled={auth.isAuthenticating}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Senha</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          placeholder="••••••••"
+                          {...field}
+                          type={showPassword ? "text" : "password"}
+                          autoComplete="current-password"
+                          disabled={auth.isAuthenticating}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 rounded-md"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          aria-label={
+                            showPassword ? "Esconder senha" : "Mostrar senha"
+                          }
+                          disabled={auth.isAuthenticating}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={auth.isAuthenticating}
+              >
+                {auth.isAuthenticating ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                Entrar
+              </Button>
+            </form>
+          </Form>
+          <div className="mt-4 text-center text-sm">
+            <Link to="/auth/esqueci-minha-senha" className="underline">
+              Esqueceu a senha?
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default LoginForm;
