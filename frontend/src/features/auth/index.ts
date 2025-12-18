@@ -2,7 +2,8 @@
 export { LoginForm } from './components/login-form';
 
 // Contexts
-export { AuthProvider, useAuth } from './contexts/auth-context';
+export { AuthProvider } from './contexts/auth-context';
+export { useAuth } from './hooks/use-auth';
 
 // Types
 export type { User, LoginCredentials, AuthState, AuthContextValue } from './types/auth.types';

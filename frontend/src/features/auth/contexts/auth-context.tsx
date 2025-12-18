@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import type { ReactNode } from 'react';
 import { cognitoClient } from '@/lib/cognito/client';
 import type { AuthContextValue, User, LoginCredentials } from '../types/auth.types';
-
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+import { AuthContext } from './auth-context.types';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -75,14 +75,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth(): AuthContextValue {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 }
 
 

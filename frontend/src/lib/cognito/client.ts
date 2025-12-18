@@ -1,5 +1,4 @@
 import { signIn, signOut, getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
-import { cognitoConfig } from './config';
 import type { User, LoginCredentials } from '@/features/auth/types/auth.types';
 
 /**

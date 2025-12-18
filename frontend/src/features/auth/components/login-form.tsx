@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useAuth } from "../contexts/auth-context";
+import { useAuth } from "../hooks/use-auth.ts";
 import { loginFormSchema, type LoginFormValues } from "../schemas/login-form.schema";
 import { Button } from "@/components/ui/button";
 import {
@@ -165,11 +165,12 @@ export function LoginForm() {
               </Button>
             </form>
           </Form>
-          <div className="mt-4 text-center text-sm">
+          {/* TODO: Implementar rota de recuperação de senha */}
+          {/* <div className="mt-4 text-center text-sm">
             <Link to="/auth/esqueci-minha-senha" className="underline">
               Esqueceu a senha?
             </Link>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </div>

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -26,17 +25,8 @@ func handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 	if req.RequestContext.Authorizer != nil && req.RequestContext.Authorizer.JWT != nil {
 		// Adiciona claims como header customizado para uso no middleware
 		for k, v := range req.RequestContext.Authorizer.JWT.Claims {
-			// Converte valores para string
-			var claimValue string
-			switch val := v.(type) {
-			case string:
-				claimValue = val
-			case float64:
-				claimValue = strings.TrimSuffix(strings.TrimSuffix(fmt.Sprintf("%.0f", val), ".0"), ".0")
-			default:
-				claimValue = fmt.Sprintf("%v", val)
-			}
-			httpReq.Header.Set("X-Claim-"+k, claimValue)
+			// JWT.Claims já é map[string]string, então v é diretamente uma string
+			httpReq.Header.Set("X-Claim-"+k, v)
 		}
 	}
 
