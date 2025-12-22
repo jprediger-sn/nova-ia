@@ -1,139 +1,141 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Opção 1: Inter (muito popular, excelente legibilidade) */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* Opção 2: Geist (moderna, usada pelo Vercel) */
+/* @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap');
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* Opção 3: Plus Jakarta Sans (elegante e moderna) */
+/* @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap'); */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+/* Opção 4: Space Grotesk (geometrica e moderna) */
+/* @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap'); */
+
+/* Opção 5: Outfit (arredondada e amigável) */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* Opção 6: Manrope (limpa e profissional) */
+/* @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+/* Opção 7: DM Sans (versátil e moderna) */
+/* @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap'); */
+
+/* Opção 8: Sora (elegante e sofisticada) */
+/* @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap'); */
+
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: oklch(0.9751 0.0127 244.2507);
+  --color-foreground: oklch(0.3729 0.0306 259.7328);
+  --color-card: oklch(1.0000 0 0);
+  --color-card-foreground: oklch(0.3729 0.0306 259.7328);
+  --color-popover: oklch(1.0000 0 0);
+  --color-popover-foreground: oklch(0.3729 0.0306 259.7328);
+  --color-primary: oklch(0.6978 0.1314 224.2793);
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.9514 0.0250 236.8242);
+  --color-secondary-foreground: oklch(0.4461 0.0263 256.8018);
+  --color-muted: oklch(0.9670 0.0029 264.5419);
+  --color-muted-foreground: oklch(0.5510 0.0234 264.3637);
+  --color-accent: oklch(0.9370 0.0395 210.3461);
+  --color-accent-foreground: oklch(0.3729 0.0306 259.7328);
+  --color-destructive: oklch(0.6368 0.2078 25.3313);
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.9276 0.0058 264.5313);
+  --color-input: oklch(0.9276 0.0058 264.5313);
+  --color-ring: oklch(0.6978 0.1314 224.2793);
+  --color-chart-1: oklch(0.7227 0.1920 149.5793);
+  --color-chart-2: oklch(0.6959 0.1491 162.4796);
+  --color-chart-3: oklch(0.5960 0.1274 163.2254);
+  --color-chart-4: oklch(0.5081 0.1049 165.6121);
+  --color-chart-5: oklch(0.4318 0.0865 166.9128);
+  --color-sidebar: oklch(0.9514 0.0250 236.8242);
+  --color-sidebar-foreground: oklch(0.3729 0.0306 259.7328);
+  --color-sidebar-primary: oklch(0.6978 0.1314 224.2793);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(91.718% 0.04599 237.295);
+  --color-sidebar-hover: oklch(0.3729 0.0306 259.7328);
+  --color-sidebar-accent-foreground: oklch(0.3729 0.0306 259.7328);
+  --color-sidebar-border: oklch(0.9276 0.0058 264.5313);
+  --color-sidebar-ring: oklch(0.6978 0.1314 224.2793);
+
+  --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Source Code Pro', 'Fira Code', 'JetBrains Mono', monospace;
+
+  --radius: 0.5rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
+  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
+  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 2px 4px -2px hsl(0 0% 0% / 0.10);
+  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 4px 6px -2px hsl(0 0% 0% / 0.10);
+  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 8px 10px -2px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
+}
+
+@theme dark {
+  --color-background: oklch(0.2077 0.0398 265.7549);
+  --color-foreground: oklch(0.8717 0.0093 258.3382);
+  --color-card: oklch(0.2795 0.0368 260.0310);
+  --color-card-foreground: oklch(0.8717 0.0093 258.3382);
+  --color-popover: oklch(0.2795 0.0368 260.0310);
+  --color-popover-foreground: oklch(0.8717 0.0093 258.3382);
+  --color-primary: oklch(0.6916 0.1299 223.9821);
+  --color-primary-foreground: oklch(0.2077 0.0398 265.7549);
+  --color-secondary: oklch(0.3351 0.0331 260.9120);
+  --color-secondary-foreground: oklch(0.7118 0.0129 286.0665);
+  --color-muted: oklch(0.2795 0.0368 260.0310);
+  --color-muted-foreground: oklch(0.5510 0.0234 264.3637);
+  --color-accent: oklch(0.3729 0.0306 259.7328);
+  --color-accent-foreground: oklch(0.7118 0.0129 286.0665);
+  --color-destructive: oklch(0.6368 0.2078 25.3313);
+  --color-destructive-foreground: oklch(0.2077 0.0398 265.7549);
+  --color-border: oklch(0.4461 0.0263 256.8018);
+  --color-input: oklch(0.4461 0.0263 256.8018);
+  --color-ring: oklch(0.6916 0.1299 223.9821);
+  --color-chart-1: oklch(0.7729 0.1535 163.2231);
+  --color-chart-2: oklch(0.7845 0.1325 181.9120);
+  --color-chart-3: oklch(0.7227 0.1920 149.5793);
+  --color-chart-4: oklch(0.6959 0.1491 162.4796);
+  --color-chart-5: oklch(0.5960 0.1274 163.2254);
+  --color-sidebar: oklch(0.2795 0.0368 260.0310);
+  --color-sidebar-foreground: oklch(0.8717 0.0093 258.3382);
+  --color-sidebar-primary: oklch(0.6916 0.1299 223.9821);
+  --color-sidebar-primary-foreground: oklch(0.2077 0.0398 265.7549);
+  --color-sidebar-accent: oklch(42.024% 0.03241 257.118);
+  --color-sidebar-hover: oklch(0.3729 0.0306 259.7328);
+  --color-sidebar-accent-foreground: oklch(0.8717 0.0093 258.3382);
+  --color-sidebar-border: oklch(0.4461 0.0263 256.8018);
+  --color-sidebar-ring: oklch(0.6916 0.1299 223.9821);
+}
+
+body {
+  @apply m-0;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+button,
+[role='button'] {
+  cursor: pointer !important;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
-}
-
-
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;

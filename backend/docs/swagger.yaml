@@ -1,0 +1,359 @@
+definitions:
+  models.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+      temporary_password:
+        type: string
+      tenant_id:
+        type: string
+    type: object
+  models.Response:
+    properties:
+      code:
+        type: string
+      data: {}
+      details:
+        type: string
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  models.UpdateUserRequest:
+    properties:
+      name:
+        type: string
+      role:
+        type: string
+      tenant_id:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/tenants:
+    get:
+      consumes:
+      - application/json
+      description: Lista todos os tenant_ids únicos existentes no sistema (a partir
+        dos usuários do Cognito).
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Lista tenants
+      tags:
+      - Tenants
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Lista usuários do Cognito User Pool, opcionalmente filtrando por
+        tenant_id.
+      parameters:
+      - description: Tenant ID para filtrar usuários
+        in: query
+        name: tenant_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Lista usuários
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo usuário no Cognito.
+      parameters:
+      - description: Dados do usuário
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Cria usuário
+      tags:
+      - Users
+  /api/users/{username}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove um usuário do Cognito.
+      parameters:
+      - description: Username do usuário
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Remove usuário
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Busca um usuário específico pelo username.
+      parameters:
+      - description: Username do usuário
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Busca usuário
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Atualiza atributos de um usuário existente.
+      parameters:
+      - description: Username do usuário
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: Dados para atualização do usuário
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Atualiza usuário
+      tags:
+      - Users
+  /api/users/{username}/disable:
+    post:
+      consumes:
+      - application/json
+      description: Desabilita um usuário sem deletá-lo.
+      parameters:
+      - description: Username do usuário
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Desabilita usuário
+      tags:
+      - Users
+  /api/users/{username}/enable:
+    post:
+      consumes:
+      - application/json
+      description: Habilita um usuário desabilitado no Cognito.
+      parameters:
+      - description: Username do usuário
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Habilita usuário
+      tags:
+      - Users
+  /api/users/{username}/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Força o reset de senha do usuário, enviando email com senha temporária.
+      parameters:
+      - description: Username do usuário
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Reseta senha do usuário
+      tags:
+      - Users
+swagger: "2.0"

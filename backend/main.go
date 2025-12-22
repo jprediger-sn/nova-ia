@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/aws/aws-lambda-go/lambda"
 	"nova-ia-api/routes"
+
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 var router = routes.SetupRouter()
@@ -11,4 +12,3 @@ var router = routes.SetupRouter()
 func main() {
 	lambda.Start(handler)
 }
-

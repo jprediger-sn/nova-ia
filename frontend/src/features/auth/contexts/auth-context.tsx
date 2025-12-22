@@ -30,17 +30,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [checkSession]);
 
   const login = useCallback(async (credentials: LoginCredentials) => {
+    // Se já houver usuário carregado, retorna imediatamente
+    if (user) {
+      return user;
+    }
+
     setIsAuthenticating(true);
     try {
       const authenticatedUser = await cognitoClient.login(credentials);
       setUser(authenticatedUser);
+      return authenticatedUser;
     } catch (error) {
       setUser(null);
       throw error;
     } finally {
       setIsAuthenticating(false);
     }
-  }, []);
+  }, [user]);
 
   const logout = useCallback(async () => {
     try {
@@ -64,6 +70,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
+  const confirmNewPassword = useCallback(async (session: string, newPassword: string) => {
+    setIsAuthenticating(true);
+    try {
+      const authenticatedUser = await cognitoClient.confirmNewPassword(session, newPassword);
+      setUser(authenticatedUser);
+    } catch (error) {
+      setUser(null);
+      throw error;
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }, []);
+
+  const resetPassword = useCallback(async (username: string) => {
+    try {
+      await cognitoClient.resetPassword(username);
+    } catch (error) {
+      throw error;
+    }
+  }, []);
+
+  const confirmResetPassword = useCallback(async (
+    username: string,
+    confirmationCode: string,
+    newPassword: string
+  ) => {
+    try {
+      await cognitoClient.confirmResetPassword(username, confirmationCode, newPassword);
+    } catch (error) {
+      throw error;
+    }
+  }, []);
+
   const value: AuthContextValue = {
     user,
     isAuthenticated: !!user,
@@ -72,6 +111,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     logout,
     refreshSession,
+    confirmNewPassword,
+    resetPassword,
+    confirmResetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

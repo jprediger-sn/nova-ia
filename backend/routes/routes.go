@@ -7,6 +7,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
+	_ "nova-ia-api/docs"
+
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 // SetupRouter configura todas as rotas da aplicação
@@ -18,6 +22,11 @@ func SetupRouter() *chi.Mux {
 	r.Use(middleware.Recoverer)
 	r.Use(customMiddleware.CORS)
 
+	// Rota para o Swagger UI
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"),
+	))
+
 	// Rotas públicas
 	r.Get("/", handlers.Home)
 	r.Get("/health", handlers.Health)
@@ -27,12 +36,26 @@ func SetupRouter() *chi.Mux {
 		// Rotas de usuários (admin-only)
 		r.Route("/users", func(r chi.Router) {
 			r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
-				Get("/", handlers.GetUsers)
-			r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
+				Get("/", handlers.ListUsers)
+			r.With(customMiddleware.RequireAuth).
 				Post("/", handlers.CreateUser)
 			r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
-				Get("/{id}", handlers.GetUser)
+				Get("/{username}", handlers.GetUser)
+			r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
+				Put("/{username}", handlers.UpdateUser)
+			r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
+				Delete("/{username}", handlers.DeleteUser)
+			r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
+				Post("/{username}/enable", handlers.EnableUser)
+			r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
+				Post("/{username}/disable", handlers.DisableUser)
+			r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
+				Post("/{username}/reset-password", handlers.ResetUserPassword)
 		})
+
+		// Tenants (admin-only)
+		r.With(customMiddleware.RequireAuth, customMiddleware.RequireRole("admin")).
+			Get("/tenants", handlers.ListTenants)
 
 		// User Groups (autenticado - qualquer role)
 		r.With(customMiddleware.RequireAuth).

@@ -19,3 +19,11 @@ func JSONError(w http.ResponseWriter, status int, message string) {
 	JSONResponse(w, status, models.Response{Error: message})
 }
 
+// JSONErrorWithCode escreve uma resposta de erro JSON com código e detalhes
+func JSONErrorWithCode(w http.ResponseWriter, status int, errorMsg, details, code string) {
+	JSONResponse(w, status, models.Response{
+		Error:   errorMsg,
+		Details: details,
+		Code:    code,
+	})
+}

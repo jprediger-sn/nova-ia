@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, Link } from "@tanstack/react-router";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useAuth } from "../hooks/use-auth.ts";
 import { loginFormSchema, type LoginFormValues } from "../schemas/login-form.schema";
+import { AppError } from "@/lib/errors";
+import { NewPasswordForm } from "./new-password-form";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,11 +26,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import novaIALogo from "@/assets/nova_ia_logo_branco.svg";
 
 export function LoginForm() {
   const auth = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [newPasswordRequired, setNewPasswordRequired] = useState<{
+    session: string;
+    email: string;
+  } | null>(null);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
@@ -40,6 +47,15 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
+      // Se já está autenticado, apenas redireciona
+      if (auth.isAuthenticated) {
+        navigate({
+          to: "/",
+          replace: true,
+        });
+        return;
+      }
+
       if (auth.isAuthenticating) return;
       
       await auth.login({
@@ -57,6 +73,16 @@ export function LoginForm() {
       });
     } catch (error) {
       console.error("Erro ao fazer login:", error);
+      
+      // Verifica se é o erro de nova senha obrigatória
+      if (error instanceof AppError && error.code === "NEW_PASSWORD_REQUIRED") {
+        // O Amplify gerencia a sessão internamente, então não precisamos passar explicitamente
+        setNewPasswordRequired({
+          session: "", // Session é gerenciada internamente pelo Amplify
+          email: data.email, // Usa o email do formulário
+        });
+        return;
+      }
       
       const errorMessage = error instanceof Error 
         ? error.message 
@@ -76,10 +102,21 @@ export function LoginForm() {
     );
   }
 
+  // Se há necessidade de definir nova senha, mostra o formulário apropriado
+  if (newPasswordRequired) {
+    return (
+      <NewPasswordForm
+        isNewPasswordRequired={true}
+        session={newPasswordRequired.session}
+        email={newPasswordRequired.email}
+      />
+    );
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
       <div className="flex items-center gap-2 mb-4">
-        <img src="/go-rag-logo.svg" alt="Logo Supernova" className="h-12" />
+        <img src={novaIALogo} alt="Logo Nova IA" className="h-12" />
       </div>
       <Card className="w-full max-w-sm">
         <CardHeader className="space-y-1 text-center">
@@ -165,12 +202,11 @@ export function LoginForm() {
               </Button>
             </form>
           </Form>
-          {/* TODO: Implementar rota de recuperação de senha */}
-          {/* <div className="mt-4 text-center text-sm">
-            <Link to="/auth/esqueci-minha-senha" className="underline">
+          <div className="mt-4 text-center text-sm">
+            <Link to="/reset-password" className="underline text-primary hover:text-primary/80">
               Esqueceu a senha?
             </Link>
-          </div> */}
+          </div>
         </CardContent>
       </Card>
     </div>

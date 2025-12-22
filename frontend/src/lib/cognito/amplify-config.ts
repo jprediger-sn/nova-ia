@@ -7,25 +7,41 @@ import { cognitoConfig } from './config';
  */
 export function configureAmplify() {
   if (!cognitoConfig.userPoolId || !cognitoConfig.clientId) {
-    console.warn('Cognito configuration is missing. Authentication will not work.');
-    return;
+    const errorMessage = 
+      'Cognito configuration is missing. ' +
+      'Make sure SST environment variables are set: VITE_COGNITO_USER_POOL_ID, VITE_COGNITO_CLIENT_ID';
+    console.error(errorMessage);
+    throw new Error(errorMessage);
   }
 
-  Amplify.configure(
-    {
-      Auth: {
-        Cognito: {
-          userPoolId: cognitoConfig.userPoolId,
-          userPoolClientId: cognitoConfig.clientId,
-          loginWith: {
-            email: true,
+  try {
+    Amplify.configure(
+      {
+        Auth: {
+          Cognito: {
+            userPoolId: cognitoConfig.userPoolId,
+            userPoolClientId: cognitoConfig.clientId,
+            loginWith: {
+              email: true,
+            },
           },
         },
       },
-    },
-    {
-      ssr: false,
+      {
+        ssr: false,
+      }
+    );
+    
+    // Verifica se a configuração foi aplicada corretamente
+    const config = Amplify.getConfig();
+    if (!config.Auth?.Cognito?.userPoolId) {
+      throw new Error('Failed to configure Amplify Auth');
     }
-  );
+    
+    console.log('Amplify configured successfully');
+  } catch (error) {
+    console.error('Error configuring Amplify:', error);
+    throw error;
+  }
 }
 
