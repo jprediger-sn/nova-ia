@@ -1,4 +1,11 @@
 definitions:
+  models.CreateModelRequest:
+    properties:
+      name:
+        type: string
+      tenant_id:
+        type: string
+    type: object
   models.CreateUserRequest:
     properties:
       email:
@@ -24,6 +31,13 @@ definitions:
       message:
         type: string
     type: object
+  models.UpdateModelRequest:
+    properties:
+      name:
+        type: string
+      tenant_id:
+        type: string
+    type: object
   models.UpdateUserRequest:
     properties:
       name:
@@ -36,6 +50,191 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/models:
+    get:
+      consumes:
+      - application/json
+      description: Lista todos os models. Admin vê todos os models, outros usuários
+        veem apenas os models do seu tenant_id.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Lista models
+      tags:
+      - Models
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo model. Usuários não-admin terão o tenant_id definido
+        automaticamente.
+      parameters:
+      - description: Dados do model
+        in: body
+        name: model
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateModelRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Cria model
+      tags:
+      - Models
+  /api/models/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove um model. Admin pode deletar qualquer model, outros usuários
+        apenas do seu tenant.
+      parameters:
+      - description: ID do model
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Remove model
+      tags:
+      - Models
+    get:
+      consumes:
+      - application/json
+      description: Busca um model específico pelo ID. Admin pode buscar qualquer model,
+        outros usuários apenas do seu tenant.
+      parameters:
+      - description: ID do model
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Busca model
+      tags:
+      - Models
+    put:
+      consumes:
+      - application/json
+      description: Atualiza um model existente. Admin pode atualizar qualquer model,
+        outros usuários apenas do seu tenant. Usuários não-admin não podem alterar
+        tenant_id.
+      parameters:
+      - description: ID do model
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados para atualização do model
+        in: body
+        name: model
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateModelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Atualiza model
+      tags:
+      - Models
   /api/tenants:
     get:
       consumes:

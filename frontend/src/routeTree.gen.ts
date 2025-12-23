@@ -9,19 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminTenantsTenantIdUsersRouteImport } from './routes/admin/tenants/$tenantId/users'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthenticatedTenantsRouteImport } from './routes/_authenticated/tenants'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
+import { Route as AuthenticatedModelsRouteImport } from './routes/_authenticated/models'
+import { Route as AuthenticatedHelpRouteImport } from './routes/_authenticated/help'
+import { Route as AuthenticatedModelModelIdDocumentsRouteImport } from './routes/_authenticated/model/$modelId.documents'
+import { Route as AuthenticatedModelModelIdConnectionsRouteImport } from './routes/_authenticated/model/$modelId.connections'
+import { Route as AuthenticatedModelModelIdChunksRouteImport } from './routes/_authenticated/model/$modelId.chunks'
 
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -29,70 +31,158 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminTenantsTenantIdUsersRoute =
-  AdminTenantsTenantIdUsersRouteImport.update({
-    id: '/admin/tenants/$tenantId/users',
-    path: '/admin/tenants/$tenantId/users',
-    getParentRoute: () => rootRouteImport,
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/auth/reset-password',
+  path: '/auth/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedTenantsRoute = AuthenticatedTenantsRouteImport.update({
+  id: '/tenants',
+  path: '/tenants',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedModelsRoute = AuthenticatedModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedHelpRoute = AuthenticatedHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedModelModelIdDocumentsRoute =
+  AuthenticatedModelModelIdDocumentsRouteImport.update({
+    id: '/model/$modelId/documents',
+    path: '/model/$modelId/documents',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedModelModelIdConnectionsRoute =
+  AuthenticatedModelModelIdConnectionsRouteImport.update({
+    id: '/model/$modelId/connections',
+    path: '/model/$modelId/connections',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedModelModelIdChunksRoute =
+  AuthenticatedModelModelIdChunksRouteImport.update({
+    id: '/model/$modelId/chunks',
+    path: '/model/$modelId/chunks',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/admin/tenants/$tenantId/users': typeof AdminTenantsTenantIdUsersRoute
+  '/help': typeof AuthenticatedHelpRoute
+  '/models': typeof AuthenticatedModelsRoute
+  '/search': typeof AuthenticatedSearchRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/tenants': typeof AuthenticatedTenantsRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/model/$modelId/chunks': typeof AuthenticatedModelModelIdChunksRoute
+  '/model/$modelId/connections': typeof AuthenticatedModelModelIdConnectionsRoute
+  '/model/$modelId/documents': typeof AuthenticatedModelModelIdDocumentsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/admin/tenants/$tenantId/users': typeof AdminTenantsTenantIdUsersRoute
+  '/help': typeof AuthenticatedHelpRoute
+  '/models': typeof AuthenticatedModelsRoute
+  '/search': typeof AuthenticatedSearchRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/tenants': typeof AuthenticatedTenantsRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/model/$modelId/chunks': typeof AuthenticatedModelModelIdChunksRoute
+  '/model/$modelId/connections': typeof AuthenticatedModelModelIdConnectionsRoute
+  '/model/$modelId/documents': typeof AuthenticatedModelModelIdDocumentsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/admin/tenants/$tenantId/users': typeof AdminTenantsTenantIdUsersRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authenticated/help': typeof AuthenticatedHelpRoute
+  '/_authenticated/models': typeof AuthenticatedModelsRoute
+  '/_authenticated/search': typeof AuthenticatedSearchRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/tenants': typeof AuthenticatedTenantsRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/_authenticated/model/$modelId/chunks': typeof AuthenticatedModelModelIdChunksRoute
+  '/_authenticated/model/$modelId/connections': typeof AuthenticatedModelModelIdConnectionsRoute
+  '/_authenticated/model/$modelId/documents': typeof AuthenticatedModelModelIdDocumentsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/login'
-    | '/reset-password'
-    | '/admin/tenants/$tenantId/users'
+    | '/help'
+    | '/models'
+    | '/search'
+    | '/settings'
+    | '/tenants'
+    | '/auth/login'
+    | '/auth/reset-password'
+    | '/model/$modelId/chunks'
+    | '/model/$modelId/connections'
+    | '/model/$modelId/documents'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/reset-password' | '/admin/tenants/$tenantId/users'
+  to:
+    | '/'
+    | '/help'
+    | '/models'
+    | '/search'
+    | '/settings'
+    | '/tenants'
+    | '/auth/login'
+    | '/auth/reset-password'
+    | '/model/$modelId/chunks'
+    | '/model/$modelId/connections'
+    | '/model/$modelId/documents'
   id:
     | '__root__'
     | '/'
-    | '/login'
-    | '/reset-password'
-    | '/admin/tenants/$tenantId/users'
+    | '/_authenticated'
+    | '/_authenticated/help'
+    | '/_authenticated/models'
+    | '/_authenticated/search'
+    | '/_authenticated/settings'
+    | '/_authenticated/tenants'
+    | '/auth/login'
+    | '/auth/reset-password'
+    | '/_authenticated/model/$modelId/chunks'
+    | '/_authenticated/model/$modelId/connections'
+    | '/_authenticated/model/$modelId/documents'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LoginRoute: typeof LoginRoute
-  ResetPasswordRoute: typeof ResetPasswordRoute
-  AdminTenantsTenantIdUsersRoute: typeof AdminTenantsTenantIdUsersRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -102,21 +192,112 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/tenants/$tenantId/users': {
-      id: '/admin/tenants/$tenantId/users'
-      path: '/admin/tenants/$tenantId/users'
-      fullPath: '/admin/tenants/$tenantId/users'
-      preLoaderRoute: typeof AdminTenantsTenantIdUsersRouteImport
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/tenants': {
+      id: '/_authenticated/tenants'
+      path: '/tenants'
+      fullPath: '/tenants'
+      preLoaderRoute: typeof AuthenticatedTenantsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/search': {
+      id: '/_authenticated/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AuthenticatedSearchRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/models': {
+      id: '/_authenticated/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof AuthenticatedModelsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/help': {
+      id: '/_authenticated/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof AuthenticatedHelpRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/model/$modelId/documents': {
+      id: '/_authenticated/model/$modelId/documents'
+      path: '/model/$modelId/documents'
+      fullPath: '/model/$modelId/documents'
+      preLoaderRoute: typeof AuthenticatedModelModelIdDocumentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/model/$modelId/connections': {
+      id: '/_authenticated/model/$modelId/connections'
+      path: '/model/$modelId/connections'
+      fullPath: '/model/$modelId/connections'
+      preLoaderRoute: typeof AuthenticatedModelModelIdConnectionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/model/$modelId/chunks': {
+      id: '/_authenticated/model/$modelId/chunks'
+      path: '/model/$modelId/chunks'
+      fullPath: '/model/$modelId/chunks'
+      preLoaderRoute: typeof AuthenticatedModelModelIdChunksRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedHelpRoute: typeof AuthenticatedHelpRoute
+  AuthenticatedModelsRoute: typeof AuthenticatedModelsRoute
+  AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedTenantsRoute: typeof AuthenticatedTenantsRoute
+  AuthenticatedModelModelIdChunksRoute: typeof AuthenticatedModelModelIdChunksRoute
+  AuthenticatedModelModelIdConnectionsRoute: typeof AuthenticatedModelModelIdConnectionsRoute
+  AuthenticatedModelModelIdDocumentsRoute: typeof AuthenticatedModelModelIdDocumentsRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedHelpRoute: AuthenticatedHelpRoute,
+  AuthenticatedModelsRoute: AuthenticatedModelsRoute,
+  AuthenticatedSearchRoute: AuthenticatedSearchRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedTenantsRoute: AuthenticatedTenantsRoute,
+  AuthenticatedModelModelIdChunksRoute: AuthenticatedModelModelIdChunksRoute,
+  AuthenticatedModelModelIdConnectionsRoute:
+    AuthenticatedModelModelIdConnectionsRoute,
+  AuthenticatedModelModelIdDocumentsRoute:
+    AuthenticatedModelModelIdDocumentsRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LoginRoute: LoginRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
-  AdminTenantsTenantIdUsersRoute: AdminTenantsTenantIdUsersRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

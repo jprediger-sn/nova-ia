@@ -10,6 +10,9 @@ export default $config({
     };
   },
   async run() {
+    // Secret para a URL do banco de dados PostgreSQL
+    const databaseUrl = new sst.Secret("DatabaseUrl");
+
     // Criar o Cognito User Pool
     const userPool = new sst.aws.CognitoUserPool("nova-ia-auth", {
       usernames: ["email"],
@@ -53,6 +56,7 @@ export default $config({
             args.memory ??= "1024 MB";
             args.environment ??= {};
             args.environment["USER_POOL_ID"] = userPool.id;
+            args.environment["DATABASE_URL"] = databaseUrl.value;
           },
         },
       },

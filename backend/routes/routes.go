@@ -61,9 +61,19 @@ func SetupRouter() *chi.Mux {
 		r.With(customMiddleware.RequireAuth).
 			Get("/cognito-user-group", handlers.GetUserGroups)
 
-		// Models (autenticado - qualquer role)
-		r.With(customMiddleware.RequireAuth).
-			Get("/models", handlers.GetModels)
+		// Models (CRUD) - autenticado - qualquer role
+		r.Route("/models", func(r chi.Router) {
+			r.With(customMiddleware.RequireAuth).
+				Get("/", handlers.ListModels)
+			r.With(customMiddleware.RequireAuth).
+				Get("/{id}", handlers.GetModel)
+			r.With(customMiddleware.RequireAuth).
+				Post("/", handlers.CreateModel)
+			r.With(customMiddleware.RequireAuth).
+				Put("/{id}", handlers.UpdateModel)
+			r.With(customMiddleware.RequireAuth).
+				Delete("/{id}", handlers.DeleteModel)
+		})
 
 		// Chunks (CRUD) - manager+ para write, autenticado para read
 		r.Route("/chunks", func(r chi.Router) {
